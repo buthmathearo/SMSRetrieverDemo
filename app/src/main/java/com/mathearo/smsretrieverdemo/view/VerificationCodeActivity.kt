@@ -54,7 +54,7 @@ class VerificationCodeActivity: AppCompatActivity() {
     private fun getSmsBroadcastReceiver(): BroadcastReceiver {
         return object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                Log.d("@@@", "onReceive()")
+
                 if (SmsRetriever.SMS_RETRIEVED_ACTION == intent?.action) {
                     val extras = intent?.extras
                     val status = extras?.get(SmsRetriever.EXTRA_STATUS) as Status
@@ -64,10 +64,11 @@ class VerificationCodeActivity: AppCompatActivity() {
                             // Get SMS message contents
                             val message = extras.get(SmsRetriever.EXTRA_SMS_MESSAGE) as String
                             mCode = Utils.extractDigit(message)
+
                             code_input.setText(mCode)
+
                             // Extract one-time code from the message and complete verification
                             // by sending the code back to your server.
-                            Log.d("@@@", mCode)
                         }
                         CommonStatusCodes.TIMEOUT -> {
                             Log.d("@@@", "Timeout (Only 5 Minutes)")
@@ -91,12 +92,13 @@ class VerificationCodeActivity: AppCompatActivity() {
 
         task.addOnSuccessListener {
             // Successfully started retriever, expect broadcast intent
-            Log.d("@@@", "init sms retriever success");
+            Log.d("@@@", "init sms retriever success")
         }
 
         task.addOnFailureListener{
+            // TODO Need to refactor when we're gonna handle this case.
             // Failed to start retriever, inspect Exception for more details
-            Log.d("@@@", "init sms retriever success");
+            Log.d("@@@", "init sms retriever failed")
         }
     }
 
